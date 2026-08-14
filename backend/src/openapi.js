@@ -155,8 +155,6 @@ const openapi = {
           site_id: { type: "integer" },
           site_code: { type: "string", example: "jbg" },
           name: { type: "string" },
-          sync_status: { type: "string", enum: ["synced", "syncing", "error"] },
-          last_sync: { type: "string", format: "date-time" },
           active_products: { type: "integer" },
           tickets_issued: { type: "integer" },
           products: { type: "array", items: { type: "object" } },
@@ -673,7 +671,7 @@ const openapi = {
     "/sites": {
       get: {
         tags: ["Sites"],
-        summary: "Status sinkronisasi seluruh unit/wahana beserta produknya",
+        summary: "Daftar seluruh unit/wahana beserta produknya",
         operationId: "listSites",
         responses: {
           200: {
