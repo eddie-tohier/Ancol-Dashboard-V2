@@ -1,8 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { sitesApi } from "@/lib/api-client"
 import PageHeader from "@/components/shared/PageHeader"
+import SummaryCards from "@/components/shared/SummaryCards"
 import { MapPin } from "lucide-react"
 
 interface Site {
@@ -14,10 +15,19 @@ interface Site {
   products: Array<{ product_code: string; product_name: string }>
 }
 
+interface SiteSummary {
+  sites: number
+  products: number
+  active_products: number
+  tickets_issued: number
+}
+
 export default function WahanaPage() {
   const [sites, setSites] = useState<Site[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [summary, setSummary] = useState<SiteSummary | null>(null)
+  const [summaryLoading, setSummaryLoading] = useState(true)
 
   async function fetchSites() {
     setLoading(true)
@@ -32,15 +42,42 @@ export default function WahanaPage() {
     }
   }
 
+  const fetchSummary = useCallback(async () => {
+    setSummaryLoading(true)
+    try {
+      const res = await sitesApi.summary()
+      setSummary(res as SiteSummary)
+    } catch {
+      setSummary(null)
+    } finally {
+      setSummaryLoading(false)
+    }
+  }, [])
+
   useEffect(() => {
     const t = setTimeout(() => fetchSites(), 0)
     return () => clearTimeout(t)
   }, [])
 
+  useEffect(() => {
+    const t = setTimeout(() => fetchSummary(), 0)
+    return () => clearTimeout(t)
+  }, [fetchSummary])
+
   return (
     <div className="page content">
       <div className="content__container space-y-4">
         <PageHeader title="Wahana" description="Daftar unit wahana beserta produk dan tiket terbit." />
+
+        <SummaryCards
+          loading={summaryLoading}
+          items={[
+            { label: "Total Wahana", value: (summary?.sites ?? 0).toLocaleString("id-ID"), bg: "/cube-bg.jpg" },
+            { label: "Total Produk", value: (summary?.products ?? 0).toLocaleString("id-ID"), bg: "/cube-bg_1.jpg" },
+            { label: "Produk Aktif", value: (summary?.active_products ?? 0).toLocaleString("id-ID"), sub: "Pernah terjual", bg: "/cube-bg_2.jpg" },
+            { label: "Total Tiket Terbit", value: (summary?.tickets_issued ?? 0).toLocaleString("id-ID"), bg: "/cube-bg_3.jpg" },
+          ]}
+        />
 
         {error && <div className="error-message">{error}</div>}
         {loading && !sites.length && (

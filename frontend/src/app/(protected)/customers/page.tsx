@@ -5,6 +5,7 @@ import { customersApi } from "@/lib/api-client"
 import { formatDateTime } from "@/lib/format"
 import PageHeader from "@/components/shared/PageHeader"
 import SearchInput from "@/components/shared/SearchInput"
+import SummaryCards from "@/components/shared/SummaryCards"
 import Avvvatars from "avvvatars-react"
 
 interface Customer {
@@ -18,6 +19,14 @@ interface Customer {
   last_visit: string | null
 }
 
+interface CustomerSummary {
+  customers: number
+  total_orders: number
+  avg_orders: number
+  active_customers: number
+  loyalty_members: number
+}
+
 export default function CustomersPage() {
   const [data, setData] = useState<{ data: Customer[]; current_page: number; last_page: number; total: number; per_page: number } | null>(null)
   const [page, setPage] = useState(1)
@@ -25,6 +34,8 @@ export default function CustomersPage() {
   const [searchInput, setSearchInput] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
+  const [summary, setSummary] = useState<CustomerSummary | null>(null)
+  const [summaryLoading, setSummaryLoading] = useState(true)
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -33,6 +44,18 @@ export default function CustomersPage() {
     }, 400)
     return () => clearTimeout(t)
   }, [searchInput])
+
+  const fetchSummary = useCallback(async () => {
+    setSummaryLoading(true)
+    try {
+      const res = await customersApi.summary()
+      setSummary(res as CustomerSummary)
+    } catch {
+      setSummary(null)
+    } finally {
+      setSummaryLoading(false)
+    }
+  }, [])
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -52,10 +75,25 @@ export default function CustomersPage() {
     return () => clearTimeout(t)
   }, [fetchData])
 
+  useEffect(() => {
+    const t = setTimeout(() => fetchSummary(), 0)
+    return () => clearTimeout(t)
+  }, [fetchSummary])
+
   return (
     <div className="page content">
       <div className="content__container space-y-4">
         <PageHeader title="Customers" description="Daftar pelanggan Ancol Connect." />
+
+        <SummaryCards
+          loading={summaryLoading}
+          items={[
+            { label: "Total Customers", value: (summary?.customers ?? 0).toLocaleString("id-ID"), bg: "/cube-bg.jpg" },
+            { label: "Total Orders", value: (summary?.total_orders ?? 0).toLocaleString("id-ID"), sub: `${summary?.avg_orders ?? 0} rata-rata / customer`, bg: "/cube-bg_1.jpg" },
+            { label: "Active Customers", value: (summary?.active_customers ?? 0).toLocaleString("id-ID"), sub: "Pernah bertransaksi", bg: "/cube-bg_2.jpg" },
+            { label: "Loyalty Members", value: (summary?.loyalty_members ?? 0).toLocaleString("id-ID"), sub: "Punya nomor loyalitas", bg: "/cube-bg_3.jpg" },
+          ]}
+        />
 
         <div className="flex justify-end gap-2">
           <SearchInput value={searchInput} onChange={setSearchInput} placeholder="Search name / phone / email..." />

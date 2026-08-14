@@ -177,12 +177,14 @@ export const ticketsApi = {
 export const customersApi = {
   list: <T = Record<string, unknown>>(params?: Record<string, string | number | undefined>) =>
     api<Paginated<T>>("/customers", { params }),
+  summary: () => api(`/customers/summary`),
   get: (id: number) => api(`/customers/${id}`),
 }
 
 // ── Sites / Wahana ──
 export const sitesApi = {
   list: <T = Record<string, unknown>>() => api<Array<T>>("/sites"),
+  summary: () => api(`/sites/summary`),
 }
 
 // ── Reconciliation ──

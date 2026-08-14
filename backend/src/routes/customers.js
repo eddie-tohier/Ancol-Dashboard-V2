@@ -38,6 +38,26 @@ router.get("/", (req, res) => {
   res.json(result)
 })
 
+// GET /api/customers/summary — agregasi pelanggan
+router.get("/summary", (_req, res) => {
+  const customers = db.prepare("SELECT COUNT(*) AS c FROM customers").get().c
+  const totalOrders = db.prepare("SELECT COUNT(*) AS c FROM orders").get().c
+  const activeCustomers = db
+    .prepare("SELECT COUNT(DISTINCT customer_id) AS c FROM orders WHERE customer_id IS NOT NULL")
+    .get().c
+  const loyaltyMembers = db
+    .prepare("SELECT COUNT(*) AS c FROM customers WHERE loyalti_no IS NOT NULL AND loyalti_no != ''")
+    .get().c
+
+  res.json({
+    customers,
+    total_orders: totalOrders,
+    avg_orders: customers ? Number((totalOrders / customers).toFixed(1)) : 0,
+    active_customers: activeCustomers,
+    loyalty_members: loyaltyMembers,
+  })
+})
+
 router.get("/:id", (req, res) => {
   const row = db.prepare("SELECT * FROM customers WHERE customer_id = ?").get(Number(req.params.id))
   if (!row) return res.status(404).json({ message: "Customer tidak ditemukan" })

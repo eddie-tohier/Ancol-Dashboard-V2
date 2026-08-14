@@ -5,6 +5,21 @@ const { db } = require("../db")
 
 const router = express.Router()
 
+// GET /api/sites/summary — agregasi wahana (murni dari DB)
+router.get("/summary", (_req, res) => {
+  const sites = db.prepare("SELECT COUNT(*) AS c FROM sites").get().c
+  const products = db.prepare("SELECT COUNT(*) AS c FROM products").get().c
+  const activeProducts = db.prepare("SELECT COUNT(DISTINCT product_id) AS c FROM orderdetails").get().c
+  const ticketsIssued = db.prepare("SELECT COUNT(*) AS c FROM ordertickets").get().c
+
+  res.json({
+    sites,
+    products,
+    active_products: activeProducts,
+    tickets_issued: ticketsIssued,
+  })
+})
+
 // GET /api/sites — daftar wahana beserta produk & tiket (murni dari DB)
 router.get("/", (_req, res) => {
   const sites = db.prepare("SELECT * FROM sites ORDER BY seqno").all()

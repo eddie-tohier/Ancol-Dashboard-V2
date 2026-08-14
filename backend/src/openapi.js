@@ -667,6 +667,32 @@ const openapi = {
         },
       },
     },
+    "/customers/summary": {
+      get: {
+        tags: ["Customers"],
+        summary: "Agregasi pelanggan",
+        operationId: "customerSummary",
+        responses: {
+          200: {
+            description: "Ringkasan pelanggan",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    customers: { type: "integer" },
+                    total_orders: { type: "integer" },
+                    avg_orders: { type: "number" },
+                    active_customers: { type: "integer" },
+                    loyalty_members: { type: "integer" },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
 
     "/sites": {
       get: {
@@ -677,6 +703,31 @@ const openapi = {
           200: {
             description: "Daftar site",
             content: { "application/json": { schema: { type: "array", items: { $ref: "#/components/schemas/Site" } } } },
+          },
+        },
+      },
+    },
+    "/sites/summary": {
+      get: {
+        tags: ["Sites"],
+        summary: "Agregasi wahana (jumlah wahana, produk, tiket)",
+        operationId: "siteSummary",
+        responses: {
+          200: {
+            description: "Ringkasan wahana",
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  properties: {
+                    sites: { type: "integer" },
+                    products: { type: "integer" },
+                    active_products: { type: "integer" },
+                    tickets_issued: { type: "integer" },
+                  },
+                },
+              },
+            },
           },
         },
       },
