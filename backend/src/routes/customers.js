@@ -19,7 +19,7 @@ function enrich(customers) {
 }
 
 router.get("/", (req, res) => {
-  const { search } = req.query
+  const { search, loyalty, activity, date_from, date_to } = req.query
   const page = Number(req.query.page) || 1
   const perPage = Number(req.query.per_page) || 15
 
@@ -30,6 +30,25 @@ router.get("/", (req, res) => {
     where.push("(name LIKE ? OR phone LIKE ? OR email LIKE ? OR customer_code LIKE ? OR loyalti_no LIKE ?)")
     params.push(q, q, q, q, q)
   }
+  if (loyalty === "yes") {
+    where.push("(loyalti_no IS NOT NULL AND loyalti_no != '')")
+  } else if (loyalty === "no") {
+    where.push("(loyalti_no IS NULL OR loyalti_no = '')")
+  }
+  if (activity === "active") {
+    where.push("EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = customers.customer_id)")
+  } else if (activity === "inactive") {
+    where.push("NOT EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = customers.customer_id)")
+  }
+  if (date_from) {
+    where.push("(SELECT MAX(o.order_date) FROM orders o WHERE o.customer_id = customers.customer_id) >= ?")
+    params.push(`${String(date_from)} 00:00:00`)
+  }
+  if (date_to) {
+    where.push("(SELECT MAX(o.order_date) FROM orders o WHERE o.customer_id = customers.customer_id) < ?")
+    params.push(`${String(date_to)} 23:59:59`)
+  }
+
   const rows = db.prepare(
     `SELECT * FROM customers ${where.length ? "WHERE " + where.join(" AND ") : ""} ORDER BY customer_id`
   ).all(...params)

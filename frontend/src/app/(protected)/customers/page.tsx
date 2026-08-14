@@ -5,6 +5,9 @@ import { customersApi } from "@/lib/api-client"
 import { formatDateTime } from "@/lib/format"
 import PageHeader from "@/components/shared/PageHeader"
 import SearchInput from "@/components/shared/SearchInput"
+import FilterSelect from "@/components/shared/FilterSelect"
+import DateRangePicker from "@/components/shared/DateRangePicker"
+import FloatingFilterBadge from "@/components/shared/FloatingFilterBadge"
 import SummaryCards from "@/components/shared/SummaryCards"
 import Avvvatars from "avvvatars-react"
 
@@ -32,6 +35,10 @@ export default function CustomersPage() {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
   const [searchInput, setSearchInput] = useState("")
+  const [loyalty, setLoyalty] = useState("all")
+  const [activity, setActivity] = useState("all")
+  const [dateFrom, setDateFrom] = useState("")
+  const [dateTo, setDateTo] = useState("")
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [summary, setSummary] = useState<CustomerSummary | null>(null)
@@ -61,14 +68,22 @@ export default function CustomersPage() {
     setLoading(true)
     setError("")
     try {
-      const res = await customersApi.list<Customer>({ page, per_page: 15, search: search || undefined })
+      const res = await customersApi.list<Customer>({
+        page,
+        per_page: 15,
+        search: search || undefined,
+        loyalty: loyalty !== "all" ? loyalty : undefined,
+        activity: activity !== "all" ? activity : undefined,
+        date_from: dateFrom || undefined,
+        date_to: dateTo || undefined,
+      })
       setData(res)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Failed to load customers")
     } finally {
       setLoading(false)
     }
-  }, [page, search])
+  }, [page, search, loyalty, activity, dateFrom, dateTo])
 
   useEffect(() => {
     const t = setTimeout(() => fetchData(), 0)
@@ -95,7 +110,37 @@ export default function CustomersPage() {
           ]}
         />
 
-        <div className="flex justify-end gap-2">
+        <div className="flex flex-wrap items-end gap-2">
+          <div className="flex flex-wrap items-end gap-2">
+            <FilterSelect
+              value={loyalty}
+              onChange={(v) => { setLoyalty(v); setPage(1) }}
+              label="Loyalty"
+              options={[
+                { value: "all", label: "All Loyalty" },
+                { value: "yes", label: "Loyalty Members" },
+                { value: "no", label: "Non-Loyalty" },
+              ]}
+            />
+            <FilterSelect
+              value={activity}
+              onChange={(v) => { setActivity(v); setPage(1) }}
+              label="Activity"
+              options={[
+                { value: "all", label: "All Activity" },
+                { value: "active", label: "Active (has orders)" },
+                { value: "inactive", label: "Inactive" },
+              ]}
+            />
+            <DateRangePicker
+              dateFrom={dateFrom}
+              dateTo={dateTo}
+              onDateFromChange={(v) => { setDateFrom(v); setPage(1) }}
+              onDateToChange={(v) => { setDateTo(v); setPage(1) }}
+              onClear={() => { setDateFrom(""); setDateTo("") }}
+              onApply={() => setPage(1)}
+            />
+          </div>
           <SearchInput value={searchInput} onChange={setSearchInput} placeholder="Search name / phone / email..." />
         </div>
 
@@ -170,6 +215,24 @@ export default function CustomersPage() {
             </div>
           )}
         </div>
+
+        <FloatingFilterBadge
+          activeFilterCount={
+            (loyalty !== "all" ? 1 : 0) +
+            (activity !== "all" ? 1 : 0) +
+            (dateFrom || dateTo ? 1 : 0) +
+            (searchInput.trim() ? 1 : 0)
+          }
+          onClearAll={() => {
+            setLoyalty("all")
+            setActivity("all")
+            setDateFrom("")
+            setDateTo("")
+            setSearchInput("")
+            setSearch("")
+            setPage(1)
+          }}
+        />
       </div>
     </div>
   )

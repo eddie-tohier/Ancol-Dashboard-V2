@@ -643,12 +643,16 @@ const openapi = {
     "/customers": {
       get: {
         tags: ["Customers"],
-        summary: "Daftar customer (dengan search & pagination)",
+        summary: "Daftar customer (dengan filter, search & pagination)",
         operationId: "listCustomers",
         parameters: [
           { name: "page", in: "query", schema: { type: "integer", default: 1 } },
           { name: "per_page", in: "query", schema: { type: "integer", default: 15 } },
           { name: "search", in: "query", schema: { type: "string" } },
+          { name: "loyalty", in: "query", schema: { type: "string", enum: ["yes", "no"] }, description: "yes = punya loyalti_no, no = tidak punya" },
+          { name: "activity", in: "query", schema: { type: "string", enum: ["active", "inactive"] }, description: "active = punya order, inactive = belum pernah order" },
+          { name: "date_from", in: "query", schema: { type: "string", format: "date" }, description: "Filter last visit (YYYY-MM-DD)" },
+          { name: "date_to", in: "query", schema: { type: "string", format: "date" }, description: "Filter last visit (YYYY-MM-DD)" },
         ],
         responses: {
           200: { description: "Daftar customer", content: { "application/json": { schema: { $ref: "#/components/schemas/Pagination" } } } },
