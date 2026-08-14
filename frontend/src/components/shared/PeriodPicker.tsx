@@ -75,6 +75,7 @@ export default function PeriodPicker({
   onClear,
 }: PeriodPickerProps) {
   const today = TODAY
+  const todayStr = todayISO()
   const [open, setOpen] = useState(false)
   const [calMonth, setCalMonth] = useState(today.getMonth() + 1)
   const [calYear, setCalYear] = useState(today.getFullYear())
@@ -260,6 +261,7 @@ export default function PeriodPicker({
                 const dateStr = `${calYear}-${String(calMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`
                 const inRange = isInRange(dateStr)
                 const isTarget = dateStr === (target === "from" ? dateFrom : dateTo)
+                const isToday = dateStr === todayStr
                 return (
                   <button
                     key={day}
@@ -271,9 +273,14 @@ export default function PeriodPicker({
                         : inRange
                           ? "bg-primary/10 text-primary"
                           : "text-gray-900 hover:bg-gray-50"
-                    }`}
+                    } ${isToday ? "font-bold" : ""}`}
                   >
-                    {day}
+                    <span className="relative inline-flex flex-col items-center leading-none">
+                      {day}
+                      {isToday && (
+                        <span className={`mt-0.5 h-1 w-1 rounded-full ${isTarget ? "bg-white" : "bg-primary"}`} />
+                      )}
+                    </span>
                   </button>
                 )
               })}

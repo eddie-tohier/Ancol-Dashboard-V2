@@ -115,7 +115,6 @@ export default function CustomersPage() {
             <FilterSelect
               value={loyalty}
               onChange={(v) => { setLoyalty(v); setPage(1) }}
-              label="Loyalty"
               options={[
                 { value: "all", label: "All Loyalty" },
                 { value: "yes", label: "Loyalty Members" },
@@ -125,7 +124,6 @@ export default function CustomersPage() {
             <FilterSelect
               value={activity}
               onChange={(v) => { setActivity(v); setPage(1) }}
-              label="Activity"
               options={[
                 { value: "all", label: "All Activity" },
                 { value: "active", label: "Active (has orders)" },
@@ -139,6 +137,7 @@ export default function CustomersPage() {
               onDateToChange={(v) => { setDateTo(v); setPage(1) }}
               onClear={() => { setDateFrom(""); setDateTo("") }}
               onApply={() => setPage(1)}
+              quickFilters={["today", "week", "month"]}
             />
           </div>
           <SearchInput value={searchInput} onChange={setSearchInput} placeholder="Search name / phone / email..." />

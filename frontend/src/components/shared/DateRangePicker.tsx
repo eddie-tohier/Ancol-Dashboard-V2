@@ -12,6 +12,7 @@ interface DateRangePickerProps {
   onApply: () => void
   onClear?: () => void
   variant?: "row" | "stacked"
+  quickFilters?: QuickFilterType[]
 }
 
 const monthNames = [
@@ -50,6 +51,7 @@ export default function DateRangePicker({
   onApply,
   onClear,
   variant = "row",
+  quickFilters,
 }: DateRangePickerProps) {
   const today = TODAY
   const todayStr = todayISO()
@@ -62,7 +64,11 @@ export default function DateRangePicker({
   const buttonRefs = useRef<Array<HTMLButtonElement | null>>([])
   const [thumb, setThumb] = useState({ left: 0, width: 0 })
 
-  const activeIndex = QUICK_FILTERS.findIndex(
+  const filters = quickFilters
+    ? QUICK_FILTERS.filter((q) => quickFilters.includes(q.value))
+    : QUICK_FILTERS
+
+  const activeIndex = filters.findIndex(
     (q) => dateFrom === quickRange(q.value).from && dateTo === quickRange(q.value).to
   )
 
@@ -162,7 +168,7 @@ export default function DateRangePicker({
         className="pointer-events-none absolute top-px bottom-px rounded-md bg-primary shadow-sm transition-[left,width] duration-200 ease-[cubic-bezier(0.4,0,0.2,1)]"
         style={{ left: thumb.left, width: thumb.width, opacity: activeIndex >= 0 ? 1 : 0 }}
       />
-      {QUICK_FILTERS.map((q, i) => {
+      {filters.map((q, i) => {
         const active = i === activeIndex
         return (
           <button
@@ -264,6 +270,7 @@ export default function DateRangePicker({
               const dateStr = `${calYear}-${String(calMonth).padStart(2, "0")}-${String(day).padStart(2, "0")}`
               const inRange = isInRange(dateStr)
               const isTarget = dateStr === (target === "from" ? dateFrom : dateTo)
+              const isToday = dateStr === todayStr
               return (
                 <button
                   key={day}
@@ -275,9 +282,14 @@ export default function DateRangePicker({
                       : inRange
                         ? "bg-primary/10 text-primary"
                         : "text-gray-900 hover:bg-gray-50"
-                  }`}
+                  } ${isToday ? "font-bold" : ""}`}
                 >
-                  {day}
+                  <span className="relative inline-flex flex-col items-center leading-none">
+                    {day}
+                    {isToday && (
+                      <span className={`mt-0.5 h-1 w-1 rounded-full ${isTarget ? "bg-white" : "bg-primary"}`} />
+                    )}
+                  </span>
                 </button>
               )
             })}

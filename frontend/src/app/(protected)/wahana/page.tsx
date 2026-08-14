@@ -115,16 +115,16 @@ export default function WahanaPage() {
                   <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Products</p>
                   <span className="text-xs font-medium text-muted-foreground">{site.products.length} produk</span>
                 </div>
-                <div className="max-h-44 space-y-1 overflow-y-auto rounded-xl border border-stroke bg-gray-50 p-2">
+                <div className="divide-y divide-stroke">
                   {site.products.length === 0 && (
                     <p className="py-2 text-center text-xs text-muted-foreground">Tidak ada produk</p>
                   )}
                   {site.products.map((p) => (
-                    <div key={p.product_code} className="flex items-center gap-2 rounded-lg bg-white px-2 py-1.5 shadow-sm">
-                      <span className="shrink-0 rounded bg-gray-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase text-muted-foreground">
+                    <div key={p.product_code} className="flex items-center gap-2 py-1.5 text-sm">
+                      <span className="shrink-0 font-mono text-[10px] font-semibold uppercase text-muted-foreground">
                         {p.product_code}
                       </span>
-                      <span className="truncate text-sm font-medium text-gray-800">{p.product_name}</span>
+                      <span className="truncate font-medium text-gray-800">{p.product_name}</span>
                     </div>
                   ))}
                 </div>
