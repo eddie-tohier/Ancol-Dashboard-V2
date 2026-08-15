@@ -36,7 +36,7 @@ export default function DefaultLayout({ children }: { children: React.ReactNode 
         onClick={() => sidebarOpen && setSidebarOpen(false)}
       >
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        <main className="flex flex-col flex-1 overflow-y-auto thin-scrollbar">
+        <main className="flex flex-col flex-1 overflow-hidden">
           {children}
         </main>
       </div>

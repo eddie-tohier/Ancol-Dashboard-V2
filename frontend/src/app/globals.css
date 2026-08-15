@@ -368,7 +368,8 @@ body {
 
 /* ── Content ── */
 .content {
-  overflow: clip;
+  overflow-y: auto;
+  min-height: 0;
   background-color: #f5f7fc;
   border-radius: var(--radius-2xl);
   padding: 1.5rem 1rem;
@@ -376,6 +377,9 @@ body {
   margin: 0 0.5rem 1rem 0.5rem;
   box-shadow: 0 8px 24px -4px color-mix(in oklab, var(--color-primary) 4%, transparent), 0 24px 56px -12px color-mix(in oklab, var(--color-primary) 9%, transparent);
 }
+.content::-webkit-scrollbar { width: 4px; }
+.content::-webkit-scrollbar-track { background: transparent; }
+.content::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--color-foreground) 15%, transparent); border-radius: 9999px; }
 @media (width >= 48rem) { .content { padding: 2rem 2rem; } }
 .content__container { width: 100%; margin-inline: auto; display: flex; flex-direction: column; gap: 0.5rem; }
 .content a { color: #0d9488; }
