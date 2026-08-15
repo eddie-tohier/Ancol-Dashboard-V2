@@ -65,7 +65,7 @@ export default function WahanaPage() {
   }, [fetchSummary])
 
   return (
-    <div className="page content">
+    <div className="page content thin-scrollbar">
       <div className="content__container space-y-4">
         <PageHeader title="Wahana" description="Daftar unit wahana beserta produk dan tiket terbit." />
 
@@ -88,46 +88,32 @@ export default function WahanaPage() {
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sites.map((site) => (
-            <div key={site.site_id} className="rounded-2xl border border-stroke bg-white p-5 shadow-sm">
+            <div key={site.site_id} className="flex flex-col rounded-2xl border border-stroke bg-white p-5 shadow-sm">
               <div className="flex items-center gap-3">
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                   <MapPin className="h-5 w-5" />
                 </span>
-                <div>
-                  <h3 className="font-bold text-gray-900">{site.name}</h3>
-                  <p className="font-mono text-xs uppercase text-muted-foreground">{site.site_code}</p>
+                <div className="min-w-0">
+                  <h3 className="truncate font-bold text-gray-900">{site.name}</h3>
+                  <p className="text-xs text-muted-foreground">
+                    {site.site_code.toUpperCase()} · {site.active_products} produk · {site.tickets_issued.toLocaleString()} tiket
+                  </p>
                 </div>
               </div>
 
-              <div className="mt-4 grid grid-cols-2 gap-2">
-                <div className="rounded-xl border border-stroke bg-gray-50 p-3 text-center">
-                  <p className="text-lg font-bold text-gray-900">{site.active_products}</p>
-                  <p className="text-xs text-muted-foreground">Produk Aktif</p>
-                </div>
-                <div className="rounded-xl border border-stroke bg-gray-50 p-3 text-center">
-                  <p className="text-lg font-bold text-gray-900">{site.tickets_issued.toLocaleString()}</p>
-                  <p className="text-xs text-muted-foreground">Tiket Terbit</p>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <div className="mb-1.5 flex items-center justify-between">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Products</p>
-                  <span className="text-xs font-medium text-muted-foreground">{site.products.length} produk</span>
-                </div>
-                <div className="divide-y divide-stroke">
-                  {site.products.length === 0 && (
-                    <p className="py-2 text-center text-xs text-muted-foreground">Tidak ada produk</p>
-                  )}
-                  {site.products.map((p) => (
-                    <div key={p.product_code} className="flex items-center gap-2 py-1.5 text-sm">
-                      <span className="shrink-0 font-mono text-[10px] font-semibold uppercase text-muted-foreground">
-                        {p.product_code}
-                      </span>
-                      <span className="truncate font-medium text-gray-800">{p.product_name}</span>
-                    </div>
-                  ))}
-                </div>
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {site.products.length === 0 && (
+                  <span className="text-xs text-muted-foreground">Tidak ada produk</span>
+                )}
+                {site.products.map((p) => (
+                  <span
+                    key={p.product_code}
+                    className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs text-gray-700 ring-1 ring-inset ring-stroke"
+                    title={p.product_name}
+                  >
+                    {p.product_name}
+                  </span>
+                ))}
               </div>
             </div>
           ))}
