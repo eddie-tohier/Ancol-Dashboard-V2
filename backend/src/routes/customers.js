@@ -19,7 +19,7 @@ function enrich(customers) {
 }
 
 router.get("/", (req, res) => {
-  const { search, loyalty, activity, date_from, date_to } = req.query
+  const { search, activity, date_from, date_to } = req.query
   const page = Number(req.query.page) || 1
   const perPage = Number(req.query.per_page) || 15
 
@@ -27,13 +27,8 @@ router.get("/", (req, res) => {
   const params = []
   if (search) {
     const q = `%${String(search).trim()}%`
-    where.push("(name LIKE ? OR phone LIKE ? OR email LIKE ? OR customer_code LIKE ? OR loyalti_no LIKE ?)")
-    params.push(q, q, q, q, q)
-  }
-  if (loyalty === "yes") {
-    where.push("(loyalti_no IS NOT NULL AND loyalti_no != '')")
-  } else if (loyalty === "no") {
-    where.push("(loyalti_no IS NULL OR loyalti_no = '')")
+    where.push("(name LIKE ? OR phone LIKE ? OR email LIKE ? OR customer_code LIKE ?)")
+    params.push(q, q, q, q)
   }
   if (activity === "active") {
     where.push("EXISTS (SELECT 1 FROM orders o WHERE o.customer_id = customers.customer_id)")
@@ -64,16 +59,12 @@ router.get("/summary", (_req, res) => {
   const activeCustomers = db
     .prepare("SELECT COUNT(DISTINCT customer_id) AS c FROM orders WHERE customer_id IS NOT NULL")
     .get().c
-  const loyaltyMembers = db
-    .prepare("SELECT COUNT(*) AS c FROM customers WHERE loyalti_no IS NOT NULL AND loyalti_no != ''")
-    .get().c
 
   res.json({
     customers,
     total_orders: totalOrders,
     avg_orders: customers ? Number((totalOrders / customers).toFixed(1)) : 0,
     active_customers: activeCustomers,
-    loyalty_members: loyaltyMembers,
   })
 })
 
