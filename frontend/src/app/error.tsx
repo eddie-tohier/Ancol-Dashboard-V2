@@ -7,11 +7,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
   return (
     <main className="error-page">
       <a href="/dashboard" className="error-page__brand">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 1.5l3.4 7.1 7.1 3.4-7.1 3.4-3.4 7.1-3.4-7.1L1.5 12l7.1-3.4z" opacity=".45" />
-          <path d="M12 1.5l3.4 7.1L12 12 8.6 8.6z" />
-        </svg>
-        <span>REC-H</span>
+        <img alt="Ancol Connect" className="h-6 w-auto" src="/ancol-connect_white_1.svg" />
       </a>
 
       <div className="empty-state empty-state--danger">
