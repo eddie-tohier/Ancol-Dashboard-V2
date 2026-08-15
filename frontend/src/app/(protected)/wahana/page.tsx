@@ -101,17 +101,22 @@ export default function WahanaPage() {
                 </div>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-1.5">
+              <div className="my-4 h-px w-full bg-stroke" />
+
+              <div className="flex flex-wrap gap-1.5">
                 {site.products.length === 0 && (
                   <span className="text-xs text-muted-foreground">Tidak ada produk</span>
                 )}
                 {site.products.map((p) => (
                   <span
                     key={p.product_code}
-                    className="inline-flex items-center rounded-md bg-gray-50 px-2 py-1 text-xs text-gray-700 ring-1 ring-inset ring-stroke"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 px-2 py-1 text-xs text-gray-700 ring-1 ring-inset ring-stroke"
                     title={p.product_name}
                   >
-                    {p.product_name}
+                    <span className="font-mono text-[10px] font-semibold uppercase text-muted-foreground">
+                      {p.product_code}
+                    </span>
+                    <span className="truncate">{p.product_name}</span>
                   </span>
                 ))}
               </div>
