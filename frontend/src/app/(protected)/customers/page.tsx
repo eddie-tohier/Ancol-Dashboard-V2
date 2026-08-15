@@ -17,7 +17,6 @@ interface Customer {
   name: string
   phone: string
   email: string | null
-  loyalti_no: string | null
   total_orders: number
   last_visit: string | null
 }
@@ -27,7 +26,6 @@ interface CustomerSummary {
   total_orders: number
   avg_orders: number
   active_customers: number
-  loyalty_members: number
 }
 
 export default function CustomersPage() {
@@ -35,7 +33,6 @@ export default function CustomersPage() {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
   const [searchInput, setSearchInput] = useState("")
-  const [loyalty, setLoyalty] = useState("all")
   const [activity, setActivity] = useState("all")
   const [dateFrom, setDateFrom] = useState("")
   const [dateTo, setDateTo] = useState("")
@@ -72,7 +69,6 @@ export default function CustomersPage() {
         page,
         per_page: 15,
         search: search || undefined,
-        loyalty: loyalty !== "all" ? loyalty : undefined,
         activity: activity !== "all" ? activity : undefined,
         date_from: dateFrom || undefined,
         date_to: dateTo || undefined,
@@ -83,7 +79,7 @@ export default function CustomersPage() {
     } finally {
       setLoading(false)
     }
-  }, [page, search, loyalty, activity, dateFrom, dateTo])
+  }, [page, search, activity, dateFrom, dateTo])
 
   useEffect(() => {
     const t = setTimeout(() => fetchData(), 0)
@@ -106,21 +102,11 @@ export default function CustomersPage() {
             { label: "Total Customers", value: (summary?.customers ?? 0).toLocaleString("id-ID"), bg: "/cube-bg.jpg" },
             { label: "Total Orders", value: (summary?.total_orders ?? 0).toLocaleString("id-ID"), sub: `${summary?.avg_orders ?? 0} rata-rata / customer`, bg: "/cube-bg_1.jpg" },
             { label: "Active Customers", value: (summary?.active_customers ?? 0).toLocaleString("id-ID"), sub: "Pernah bertransaksi", bg: "/cube-bg_2.jpg" },
-            { label: "Loyalty Members", value: (summary?.loyalty_members ?? 0).toLocaleString("id-ID"), sub: "Punya nomor loyalitas", bg: "/cube-bg_3.jpg" },
           ]}
         />
 
         <div className="flex flex-wrap items-end gap-2">
           <div className="flex flex-wrap items-end gap-2">
-            <FilterSelect
-              value={loyalty}
-              onChange={(v) => { setLoyalty(v); setPage(1) }}
-              options={[
-                { value: "all", label: "All Loyalty" },
-                { value: "yes", label: "Loyalty Members" },
-                { value: "no", label: "Non-Loyalty" },
-              ]}
-            />
             <FilterSelect
               value={activity}
               onChange={(v) => { setActivity(v); setPage(1) }}
@@ -159,7 +145,6 @@ export default function CustomersPage() {
                   <th>Name</th>
                   <th>Phone</th>
                   <th>Email</th>
-                  <th>Loyalty No</th>
                   <th className="text-right">Orders</th>
                   <th>Last Visit</th>
                 </tr>
@@ -167,7 +152,7 @@ export default function CustomersPage() {
               <tbody>
                 {loading && (
                   <tr>
-                    <td colSpan={7}>
+                    <td colSpan={6}>
                       <div className="flex items-center justify-center py-10">
                         <div className="h-6 w-6 animate-spin rounded-full border-4 border-primary border-t-transparent" />
                       </div>
@@ -176,7 +161,7 @@ export default function CustomersPage() {
                 )}
                 {!loading && data?.data.length === 0 && (
                   <tr>
-                    <td colSpan={7}>
+                    <td colSpan={6}>
                       <div className="py-10 text-center text-muted-foreground">No customers found.</div>
                     </td>
                   </tr>
@@ -193,7 +178,6 @@ export default function CustomersPage() {
                       </td>
                       <td className="text-sm">{c.phone || "-"}</td>
                       <td className="max-w-[12rem] truncate text-sm text-muted-foreground">{c.email || "-"}</td>
-                      <td className="font-mono text-xs text-muted-foreground">{c.loyalti_no || "-"}</td>
                       <td className="text-right font-semibold text-gray-900">{c.total_orders}</td>
                       <td className="whitespace-nowrap text-xs text-muted-foreground">{formatDateTime(c.last_visit)}</td>
                     </tr>
@@ -217,13 +201,11 @@ export default function CustomersPage() {
 
         <FloatingFilterBadge
           activeFilterCount={
-            (loyalty !== "all" ? 1 : 0) +
             (activity !== "all" ? 1 : 0) +
             (dateFrom || dateTo ? 1 : 0) +
             (searchInput.trim() ? 1 : 0)
           }
           onClearAll={() => {
-            setLoyalty("all")
             setActivity("all")
             setDateFrom("")
             setDateTo("")
