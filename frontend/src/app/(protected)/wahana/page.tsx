@@ -113,9 +113,10 @@ export default function WahanaPage() {
                     className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 px-2 py-1 text-xs text-gray-700 ring-1 ring-inset ring-stroke"
                     title={p.product_name}
                   >
-                    <span className="font-mono text-[10px] font-semibold uppercase text-muted-foreground">
+                    <span className="font-mono text-[10px] font-semibold uppercase text-gray-500">
                       {p.product_code}
                     </span>
+                    <span className="text-gray-400">|</span>
                     <span className="truncate">{p.product_name}</span>
                   </span>
                 ))}
