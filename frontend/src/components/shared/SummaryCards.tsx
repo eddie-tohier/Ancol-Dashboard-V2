@@ -10,9 +10,11 @@ interface SummaryCardsProps {
   loading?: boolean
 }
 
+const LG_COLS: Record<number, string> = { 3: "lg:grid-cols-3", 4: "lg:grid-cols-4" }
+
 export default function SummaryCards({ items, loading }: SummaryCardsProps) {
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+    <div className={`grid grid-cols-1 gap-3 sm:grid-cols-2 ${LG_COLS[items.length] ?? "lg:grid-cols-4"}`}>
       {items.map((c) => (
         <div
           key={c.label}
