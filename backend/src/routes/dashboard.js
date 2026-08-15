@@ -2,7 +2,6 @@
 
 const express = require("express")
 const { db } = require("../db")
-const { enrichOrders } = require("../utils/enrich")
 
 const router = express.Router()
 
@@ -219,12 +218,6 @@ router.get("/sharing", (req, res) => {
     partner_share: partnerShare,
     pja_share: pjaShare,
   })
-})
-
-// recent orders (10)
-router.get("/recent", (req, res) => {
-  const rows = db.prepare("SELECT * FROM orders o ORDER BY o.order_date DESC LIMIT 10").all()
-  res.json(enrichOrders(rows))
 })
 
 // summary per unit/site

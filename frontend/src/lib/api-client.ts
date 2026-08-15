@@ -141,7 +141,6 @@ export const dashboardApi = {
     api(`/dashboard/charts`, { params: { period, date_from: dateFrom, date_to: dateTo } }),
   sharing: (period?: string, dateFrom?: string, dateTo?: string) =>
     api(`/dashboard/sharing`, { params: { period, date_from: dateFrom, date_to: dateTo } }),
-  recent: () => api("/dashboard/recent"),
   summary: (period?: string, dateFrom?: string, dateTo?: string) =>
     api(`/dashboard/summary`, { params: { period, date_from: dateFrom, date_to: dateTo } }),
 }

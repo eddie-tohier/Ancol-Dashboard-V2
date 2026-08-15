@@ -398,19 +398,6 @@ const openapi = {
         },
       },
     },
-    "/dashboard/recent": {
-      get: {
-        tags: ["Dashboard"],
-        summary: "10 order terbaru",
-        operationId: "dashboardRecent",
-        responses: {
-          200: {
-            description: "Daftar order terbaru",
-            content: { "application/json": { schema: { type: "array", items: { $ref: "#/components/schemas/Order" } } } },
-          },
-        },
-      },
-    },
     "/dashboard/summary": {
       get: {
         tags: ["Dashboard"],
