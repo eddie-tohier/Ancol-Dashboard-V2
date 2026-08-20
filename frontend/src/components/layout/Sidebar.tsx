@@ -13,8 +13,10 @@ import {
   Settings,
   Ticket,
   UserCog,
+  Search,
 } from "lucide-react"
 import { getMenuWithSep, defaultMenuWithSep, SEP } from "@/lib/menuConfig"
+import { getStoredRoles } from "@/lib/api-client"
 
 interface SidebarProps {
   sidebarOpen: boolean
@@ -31,6 +33,30 @@ const menuMap: Record<string, { path: string; label: string; icon: React.Compone
   "/wahana": { path: "/wahana", label: "Wahana", icon: Ticket },
   "/settings": { path: "/settings", label: "Settings", icon: Settings },
   "/admin/users": { path: "/admin/users", label: "Admin Users", icon: UserCog },
+  "/cs-search": { path: "/cs-search", label: "CS Search", icon: Search },
+}
+
+const ALL_ROUTES = ["/dashboard", "/orders", "/payments", "/tickets", "/reconciliation", "/customers", "/wahana", "/settings", "/admin/users"]
+const CS_ROUTES = ["/cs-search"]
+
+function getVisiblePaths(): string[] {
+  const roles = getStoredRoles()
+  const roleCodes = roles.map((r) => r.role_code)
+  const isCS = roleCodes.includes("CS")
+  const isSA = roleCodes.includes("SA")
+
+  if (isCS && !isSA) {
+    // CS role: only CS Search
+    return CS_ROUTES
+  }
+
+  if (isSA) {
+    // Super Admin: all routes + CS Search
+    return [...ALL_ROUTES, SEP, ...CS_ROUTES]
+  }
+
+  // Admin and others: all routes except CS Search
+  return ALL_ROUTES
 }
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
@@ -38,7 +64,20 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
   const [menuWithSep, setMenuWithSep] = useState<string[]>(defaultMenuWithSep)
 
   useEffect(() => {
-    const t = setTimeout(() => setMenuWithSep(getMenuWithSep()), 0)
+    const t = setTimeout(() => {
+      const visiblePaths = getVisiblePaths()
+      const storedMenu = getMenuWithSep()
+
+      // Filter stored menu to only include visible paths
+      const filtered = storedMenu.filter((p) => p === SEP || visiblePaths.includes(p))
+
+      // If CS Search is visible but not in stored menu, add it
+      if (visiblePaths.includes("/cs-search") && !filtered.includes("/cs-search")) {
+        filtered.push(SEP, "/cs-search")
+      }
+
+      setMenuWithSep(filtered.length > 0 ? filtered : visiblePaths)
+    }, 0)
     return () => clearTimeout(t)
   }, [])
 
@@ -47,6 +86,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
 
   function isActive(path: string) {
     if (path === "/dashboard") return pathname === "/dashboard"
+    if (path === "/cs-search") return pathname === "/cs-search"
     return pathname.startsWith(path)
   }
 
@@ -86,27 +126,29 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }: SidebarProps) {
             </ul>
           </div>
 
-          <div className="sidebar__group">
-            <span className="sidebar__group-title">Settings</span>
-            <ul className="sidebar__list">
-              {otherItems.map((item) => {
-                const Icon = item.icon
-                return (
-                  <li className="sidebar__item" key={item.path}>
-                    <Link
-                      href={item.path}
-                      onClick={() => setSidebarOpen(false)}
-                      className="sidebar__button"
-                      aria-current={isActive(item.path) ? "page" : undefined}
-                    >
-                      <Icon className="sidebar__icon" />
-                      <span>{item.label}</span>
-                    </Link>
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+          {otherItems.length > 0 && (
+            <div className="sidebar__group">
+              <span className="sidebar__group-title">Settings</span>
+              <ul className="sidebar__list">
+                {otherItems.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <li className="sidebar__item" key={item.path}>
+                      <Link
+                        href={item.path}
+                        onClick={() => setSidebarOpen(false)}
+                        className="sidebar__button"
+                        aria-current={isActive(item.path) ? "page" : undefined}
+                      >
+                        <Icon className="sidebar__icon" />
+                        <span>{item.label}</span>
+                      </Link>
+                    </li>
+                  )
+                })}
+              </ul>
+            </div>
+          )}
         </nav>
       </div>
 

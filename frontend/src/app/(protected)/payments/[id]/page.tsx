@@ -74,30 +74,80 @@ export default function PaymentDetailPage() {
         </PageHeader>
 
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+          {/* Payment Info */}
           <div className="rounded-2xl border border-stroke bg-white p-6 shadow-sm lg:col-span-2">
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              {[
-                { label: "Amount", value: formatRupiah(payment.payment_amt), big: true },
-                { label: "Order No", value: payment.order_no || "-" },
-                { label: "Method", value: `${payment.payment_method.toUpperCase()}${payment.bank_code ? ` • ${payment.bank_code}` : ""}` },
-                { label: "Gateway", value: payment.gateway },
-                { label: "Transaction ID", value: payment.transaction_id || "-", mono: true },
-                { label: "Payment Number (VA)", value: payment.payment_number || "-", mono: true },
-                { label: "Currency", value: payment.currency || "IDR" },
-                { label: "Order Date", value: formatDateTime(payment.order_date) },
-                { label: "Transaction Time", value: formatDateTime(payment.transaction_time) },
-                { label: "Settlement Time", value: formatDateTime(payment.settlement_time) },
-              ].map((f) => (
-                <div key={f.label} className="rounded-xl border border-stroke bg-gray-50 p-4">
-                  <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{f.label}</p>
-                  <p className={`mt-1 ${f.big ? "text-2xl font-bold text-gray-900" : "text-sm font-medium text-gray-900"} ${f.mono ? "font-mono text-xs" : ""}`}>
-                    {f.value}
-                  </p>
-                </div>
-              ))}
+            {/* Amount + Order No */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Amount</p>
+                <p className="mt-1 text-2xl font-bold text-gray-900">{formatRupiah(payment.payment_amt)}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Order No</p>
+                <p className="mt-1 text-sm font-medium text-gray-900">{payment.order_no || "-"}</p>
+              </div>
+            </div>
+
+            <div className="my-4 border-t border-stroke" />
+
+            {/* Method + Gateway */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Method</p>
+                <p className="mt-1 text-sm font-medium text-gray-900">
+                  {payment.payment_method.toUpperCase()}{payment.bank_code ? ` • ${payment.bank_code}` : ""}
+                </p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Gateway</p>
+                <p className="mt-1 text-sm font-medium text-gray-900">{payment.gateway}</p>
+              </div>
+            </div>
+
+            <div className="my-4 border-t border-stroke" />
+
+            {/* Transaction ID + VA Number */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Transaction ID</p>
+                <p className="mt-1 font-mono text-xs font-medium text-gray-900">{payment.transaction_id || "-"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Payment Number (VA)</p>
+                <p className="mt-1 font-mono text-xs font-medium text-gray-900">{payment.payment_number || "-"}</p>
+              </div>
+            </div>
+
+            <div className="my-4 border-t border-stroke" />
+
+            {/* Currency + Order Date */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Currency</p>
+                <p className="mt-1 text-sm font-medium text-gray-900">{payment.currency || "IDR"}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Order Date</p>
+                <p className="mt-1 text-sm font-medium text-gray-900">{formatDateTime(payment.order_date)}</p>
+              </div>
+            </div>
+
+            <div className="my-4 border-t border-stroke" />
+
+            {/* Transaction Time + Settlement Time */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Transaction Time</p>
+                <p className="mt-1 text-sm font-medium text-gray-900">{formatDateTime(payment.transaction_time)}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Settlement Time</p>
+                <p className="mt-1 text-sm font-medium text-gray-900">{formatDateTime(payment.settlement_time)}</p>
+              </div>
             </div>
           </div>
 
+          {/* Customer */}
           <div className="rounded-2xl border border-stroke bg-white p-6 shadow-sm">
             <h3 className="mb-3 text-sm font-bold uppercase tracking-wide text-muted-foreground">Customer</h3>
             <div className="flex items-center gap-3">

@@ -172,6 +172,16 @@ export const ticketsApi = {
   get: (id: number) => api(`/tickets/${id}`),
 }
 
+// ── CS Search ──
+export const csApi = {
+  searchByOrderNo: (orderNo: string) =>
+    api("/tickets/search", { params: { order_no: orderNo } }),
+  resendTicket: (ticketId: number) =>
+    api(`/tickets/${ticketId}/resend`, { method: "POST" }),
+  resendOrder: (orderId: number) =>
+    api("/tickets/resend-order", { method: "POST", body: JSON.stringify({ order_id: orderId }) }),
+}
+
 // ── Customers ──
 export const customersApi = {
   list: <T = Record<string, unknown>>(params?: Record<string, string | number | undefined>) =>

@@ -20,7 +20,11 @@ export default function LoginPage() {
     try {
       const res = await login(email, password)
       storeAuth(res)
-      router.push("/dashboard")
+
+      // Check if user has CS role
+      const roles = (res as { roles: Array<{ role_code: string }> }).roles || []
+      const isCS = roles.some((r) => r.role_code === "CS")
+      router.push(isCS ? "/cs-search" : "/dashboard")
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Login failed. Please try again."
       setError(msg)

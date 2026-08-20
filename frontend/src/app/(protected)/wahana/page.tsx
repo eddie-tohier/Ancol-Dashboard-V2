@@ -110,10 +110,10 @@ export default function WahanaPage() {
                 {site.products.map((p) => (
                   <span
                     key={p.product_code}
-                    className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 px-2 py-1 text-xs text-gray-700 ring-1 ring-inset ring-stroke"
+                    className="inline-flex items-center gap-1.5 rounded-md bg-gray-50 px-2.5 py-1.5 text-sm text-gray-700 ring-1 ring-inset ring-stroke"
                     title={p.product_name}
                   >
-                    <span className="font-mono text-[10px] font-semibold uppercase text-gray-500">
+                    <span className="font-mono text-xs font-semibold uppercase text-gray-500">
                       {p.product_code}
                     </span>
                     <span className="text-gray-400">|</span>

@@ -74,6 +74,7 @@ const USERS = [
   { user_id: 2, email: "probe-test@x.com", nickname: "Probe", role_id: 2 },
   { user_id: 3, email: "test.bruno@ancol.local", nickname: "Test Bruno", role_id: 3 },
   { user_id: 4, email: "eddietohier@gmail.com", nickname: "eddietohier", role_id: 1 },
+  { user_id: 5, email: "cs@ancol.local", nickname: "CS Admin", role_id: 4 },
 ]
 
 const ROLES = [
@@ -81,6 +82,7 @@ const ROLES = [
   { role_id: 1, code: "AD", name: "Admin", desc: "Role to access and manage organization data" },
   { role_id: 2, code: "PROBE", name: "Probe", desc: "" },
   { role_id: 3, code: "TESTROL", name: "Test Role", desc: "x" },
+  { role_id: 4, code: "CS", name: "Customer Service", desc: "CS role for ticket search and resend" },
 ]
 
 const MODULES = [
@@ -89,6 +91,7 @@ const MODULES = [
   { module_id: 3, code: "RoleMgmt", name: "Role Management", sortno: 20, label: "Role", icon: "role.png", desc: "Module to create, delete, and maintain role for the system" },
   { module_id: 4, code: "PROBE", name: "Probe", sortno: 0, label: null, icon: null, desc: null },
   { module_id: 5, code: "TESTMOD", name: "Test Module", sortno: 99, label: null, icon: null, desc: "x" },
+  { module_id: 6, code: "CSModule", name: "CS Ticket Search", sortno: 5, label: "CS Search", icon: "search.png", desc: "Module for CS to search and resend tickets" },
 ]
 
 const TRXSTATUS = [
@@ -156,12 +159,14 @@ function seed(db) {
   insert("modules", ["module_id", "module_code", "module_name", "created", "updated", "created_by", "updated_by", "description", "sortno", "module_icon", "module_label"],
     MODULES.map((m) => [m.module_id, m.code, m.name, now, now, 0, 0, m.desc, m.sortno, m.icon, m.label]))
 
-  // role_modules: Super Admin full, Admin semua module, lainnya kosong
+  // role_modules: Super Admin full, Admin semua module, CS hanya CSModule
   const roleModules = []
   for (const m of MODULES) {
-    roleModules.push([m.module_id, 0, "Full access", now, now, 0, 0, 0])
-    if (m.module_id <= 3) roleModules.push([m.module_id, 1, "Admin access", now, now, 0, 0, 0])
+    roleModules.push([m.module_id, 0, "Full access", now, now, 0, 0, 0])   // SA gets ALL modules
+    if (m.module_id <= 3) roleModules.push([m.module_id, 1, "Admin access", now, now, 0, 0, 0]) // Admin gets first 3
   }
+  // CS role gets CSModule only
+  roleModules.push([6, 4, "CS access", now, now, 0, 0, 0])
   insert("role_modules", ["module_id", "role_id", "description", "created", "updated", "updated_by", "created_by", "read_only"], roleModules)
 
   // ── Reference ──

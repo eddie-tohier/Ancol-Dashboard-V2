@@ -63,7 +63,7 @@ interface ProfileUser {
   enabled?: boolean
 }
 
-type Tab = "profile" | "roles" | "menu-order" | "revenue"
+type Tab = "profile" | "roles" | "menu-order" | "revenue" | "payment"
 type MenuGroup = "main" | "settings"
 
 const MENU_LABELS: Record<string, string> = {
@@ -83,7 +83,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false)
   const [saveMessage, setSaveMessage] = useState<{ type: "success" | "error"; text: string } | null>(null)
 
-  const tabKeys: Tab[] = ["profile", "roles", "menu-order", "revenue"]
+  const tabKeys: Tab[] = ["profile", "roles", "menu-order", "revenue", "payment"]
   const tabRefs = useRef<Record<string, HTMLButtonElement | null>>({})
   const tabContainerRef = useRef<HTMLDivElement>(null)
   const [indicator, setIndicator] = useState({ left: 0, width: 0 })
@@ -351,6 +351,25 @@ export default function SettingsPage() {
     }
   }
 
+  // ── Payment Instruments ──
+  const [paymentMethods, setPaymentMethods] = useState([
+    { code: "BCA", name: "Bank BCA", color: "#0060A9", logo: "BCA", enabled: true },
+    { code: "BNI", name: "Bank BNI", color: "#E31837", logo: "BNI", enabled: true },
+    { code: "BRI", name: "Bank BRI", color: "#004B87", logo: "BRI", enabled: true },
+    { code: "MANDIRI", name: "Bank Mandiri", color: "#003D7A", logo: "M", enabled: true },
+    { code: "BSI", name: "Bank Syariah Indonesia", color: "#00875A", logo: "BSI", enabled: true },
+    { code: "CIMB", name: "CIMB Niaga", color: "#8B1A1A", logo: "CIMB", enabled: true },
+    { code: "PERMATA", name: "Bank Permata", color: "#EC1C24", logo: "P", enabled: true },
+    { code: "DANA", name: "DANA", color: "#108EE9", logo: "DANA", enabled: true },
+    { code: "GOPAY", name: "GoPay", color: "#00AA13", logo: "GP", enabled: true },
+  ])
+
+  const handleTogglePayment = (code: string) => {
+    setPaymentMethods((prev) =>
+      prev.map((m) => (m.code === code ? { ...m, enabled: !m.enabled } : m))
+    )
+  }
+
   const username = user?.email || storedUser?.email || "user"
 
   return (
@@ -381,6 +400,7 @@ export default function SettingsPage() {
               {key === "roles" && "RBAC Roles"}
               {key === "menu-order" && "Menu Order"}
               {key === "revenue" && "Revenue Sharing"}
+              {key === "payment" && "Payment"}
             </button>
           ))}
         </div>
@@ -745,59 +765,101 @@ export default function SettingsPage() {
               )}
 
               {settings && (
-                <form onSubmit={handleSaveSettings} className="max-w-xl space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="revshare">Revenue Sharing (%)</Label>
-                    <div className="relative">
-                      <Percent className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        id="revshare"
-                        type="number"
-                        min={0}
-                        max={100}
-                        step="0.1"
-                        className="pl-9"
-                        value={form.revsharing_pct}
-                        onChange={(e) => setForm({ ...form, revsharing_pct: Number(e.target.value) })}
-                      />
+                <form onSubmit={handleSaveSettings} className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                  {/* Revenue Sharing */}
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="revshare">Revenue Sharing (%)</Label>
+                      <div className="relative">
+                        <Percent className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          id="revshare"
+                          type="number"
+                          min={0}
+                          max={100}
+                          step="0.1"
+                          className="pl-9"
+                          value={form.revsharing_pct}
+                          onChange={(e) => setForm({ ...form, revsharing_pct: Number(e.target.value) })}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground">Persentase bagi hasil ke Ancol.</p>
                     </div>
-                    <p className="text-xs text-muted-foreground">Persentase bagi hasil ke Ancol.</p>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="pbjt">PBJT Rate (%)</Label>
+                      <div className="relative">
+                        <Percent className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                          id="pbjt"
+                          type="number"
+                          min={0}
+                          max={100}
+                          step="0.1"
+                          className="pl-9"
+                          value={form.pbjt_rate}
+                          onChange={(e) => setForm({ ...form, pbjt_rate: Number(e.target.value) })}
+                        />
+                      </div>
+                      <p className="text-xs text-muted-foreground">Pajak barang dan jasa / tiket.</p>
+                    </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="pbjt">PBJT Rate (%)</Label>
-                    <div className="relative">
-                      <Percent className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                      <Input
-                        id="pbjt"
-                        type="number"
-                        min={0}
-                        max={100}
-                        step="0.1"
-                        className="pl-9"
-                        value={form.pbjt_rate}
-                        onChange={(e) => setForm({ ...form, pbjt_rate: Number(e.target.value) })}
+                  {/* PBJT Option + Save */}
+                  <div className="space-y-4">
+                    <label className="flex items-center gap-3 rounded-xl border border-stroke bg-gray-50 p-4 text-sm font-medium text-gray-900 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        className="checkbox"
+                        checked={form.is_pbjt_include}
+                        onChange={(e) => setForm({ ...form, is_pbjt_include: e.target.checked })}
                       />
-                    </div>
-                    <p className="text-xs text-muted-foreground">Pajak barang dan jasa / tiket.</p>
+                      PBJT sudah termasuk harga tiket
+                    </label>
+
+                    <Button type="submit" disabled={saving} size="lg">
+                      {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
+                      {saving ? "Menyimpan..." : "Simpan Konfigurasi"}
+                    </Button>
                   </div>
-
-                  <label className="flex items-center gap-3 text-sm font-medium text-gray-900 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      className="checkbox"
-                      checked={form.is_pbjt_include}
-                      onChange={(e) => setForm({ ...form, is_pbjt_include: e.target.checked })}
-                    />
-                    PBJT sudah termasuk harga tiket
-                  </label>
-
-                  <Button type="submit" disabled={saving} size="lg">
-                    {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                    {saving ? "Menyimpan..." : "Simpan Konfigurasi"}
-                  </Button>
                 </form>
               )}
+            </div>
+          )}
+
+          {/* ── Payment Instruments Tab ── */}
+          {activeTab === "payment" && (
+            <div key="payment" className="animate-tab-slide p-6">
+              <h3 className="text-lg font-bold text-black">Payment Instruments</h3>
+              <p className="mb-6 text-sm text-muted-foreground mt-1">
+                Enable atau disable metode pembayaran Virtual Account dari berbagai bank.
+              </p>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {paymentMethods.map((bank) => (
+                  <div
+                    key={bank.code}
+                    className="flex items-center justify-between rounded-xl border border-stroke bg-white p-4 transition-colors hover:bg-gray-50"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white"
+                        style={{ backgroundColor: bank.color }}
+                      >
+                        {bank.logo}
+                      </div>
+                      <div>
+                        <p className="text-sm font-semibold text-gray-900">{bank.name}</p>
+                        <p className="text-xs text-muted-foreground">VA • {bank.code}</p>
+                      </div>
+                    </div>
+                    <Switch
+                      checked={bank.enabled}
+                      onCheckedChange={() => handleTogglePayment(bank.code)}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
