@@ -30,13 +30,13 @@ const menuMap: Record<string, { path: string; label: string; icon: React.Compone
   "/tickets": { path: "/tickets", label: "Tickets", icon: TicketCheck },
   "/reconciliation": { path: "/reconciliation", label: "Reconciliation", icon: FileSpreadsheet },
   "/customers": { path: "/customers", label: "Customers", icon: Users },
-  "/wahana": { path: "/wahana", label: "Wahana", icon: Ticket },
+  "/attractions": { path: "/attractions", label: "Attractions", icon: Ticket },
   "/settings": { path: "/settings", label: "Settings", icon: Settings },
   "/admin/users": { path: "/admin/users", label: "Admin Users", icon: UserCog },
   "/cs-search": { path: "/cs-search", label: "CS Search", icon: Search },
 }
 
-const ALL_ROUTES = ["/dashboard", "/orders", "/payments", "/tickets", "/reconciliation", "/customers", "/wahana", "/settings", "/admin/users"]
+const ALL_ROUTES = ["/dashboard", "/orders", "/payments", "/tickets", "/reconciliation", "/customers", "/attractions", "/settings", "/admin/users"]
 const CS_ROUTES = ["/cs-search"]
 
 function getVisiblePaths(): string[] {

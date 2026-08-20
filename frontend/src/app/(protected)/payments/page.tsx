@@ -119,16 +119,16 @@ export default function PaymentsPage() {
   return (
     <div className="page content">
       <div className="content__container space-y-4">
-        <PageHeader title="Payments" description="Daftar pembayaran dari payment gateway (Midtrans)." />
+        <PageHeader title="Payments" description="List of payments from payment gateway (Midtrans)." />
 
         {/* Summary */}
         <SummaryCards
           loading={summaryLoading}
           items={[
             { label: "Total Payments", value: summary?.payments ?? 0, sub: `${summary?.status_counts?.PE ?? 0} pending · ${summary?.status_counts?.FL ?? 0} failed`, bg: "/cube-bg.jpg" },
-            { label: "Collected", value: formatRupiah(summary?.collected), sub: `${summary?.status_counts?.PS ?? 0} transaksi sukses`, bg: "/cube-bg_1.jpg" },
-            { label: "Gross Amount", value: formatRupiah(summary?.total_amt), sub: "Total nominal", bg: "/cube-bg_2.jpg" },
-            { label: "Success", value: summary?.status_counts?.PS ?? 0, sub: "Pembayaran sukses", bg: "/cube-bg_3.jpg" },
+            { label: "Collected", value: formatRupiah(summary?.collected), sub: `${summary?.status_counts?.PS ?? 0} successful transactions`, bg: "/cube-bg_1.jpg" },
+            { label: "Gross Amount", value: formatRupiah(summary?.total_amt), sub: "Total amount", bg: "/cube-bg_2.jpg" },
+            { label: "Success", value: summary?.status_counts?.PS ?? 0, sub: "Successful payments", bg: "/cube-bg_3.jpg" },
           ]}
         />
 

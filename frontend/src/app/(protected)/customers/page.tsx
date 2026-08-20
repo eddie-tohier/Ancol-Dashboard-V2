@@ -94,14 +94,14 @@ export default function CustomersPage() {
   return (
     <div className="page content">
       <div className="content__container space-y-4">
-        <PageHeader title="Customers" description="Daftar pelanggan Ancol Connect." />
+        <PageHeader title="Customers" description="List of Ancol Connect customers." />
 
         <SummaryCards
           loading={summaryLoading}
           items={[
             { label: "Total Customers", value: (summary?.customers ?? 0).toLocaleString("id-ID"), bg: "/cube-bg.jpg" },
-            { label: "Total Orders", value: (summary?.total_orders ?? 0).toLocaleString("id-ID"), sub: `${summary?.avg_orders ?? 0} rata-rata / customer`, bg: "/cube-bg_1.jpg" },
-            { label: "Active Customers", value: (summary?.active_customers ?? 0).toLocaleString("id-ID"), sub: "Pernah bertransaksi", bg: "/cube-bg_2.jpg" },
+            { label: "Total Orders", value: (summary?.total_orders ?? 0).toLocaleString("id-ID"), sub: `${summary?.avg_orders ?? 0} average per customer`, bg: "/cube-bg_1.jpg" },
+            { label: "Active Customers", value: (summary?.active_customers ?? 0).toLocaleString("id-ID"), sub: "Has transacted", bg: "/cube-bg_2.jpg" },
           ]}
         />
 

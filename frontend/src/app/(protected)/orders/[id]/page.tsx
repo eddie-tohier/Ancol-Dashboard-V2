@@ -68,7 +68,7 @@ export default function OrderDetailPage() {
   if (error || !order) {
     return (
       <div className="page content">
-        <div className="error-message">{error || "Order tidak ditemukan"}</div>
+        <div className="error-message">{error || "Order not found"}</div>
       </div>
     )
   }
@@ -82,7 +82,7 @@ export default function OrderDetailPage() {
           <button onClick={() => router.back()} className="mb-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
             <ArrowLeft className="h-4 w-4" /> Back
           </button>
-          <PageHeader title={`Order ${order.order_no}`} description={`Detail transaksi order #${order.order_id}`}>
+          <PageHeader title={`Order ${order.order_no}`} description={`Order transaction detail #${order.order_id}`}>
             <StatusBadge label={order.status_label} color={order.status_color} />
             <button className="button button--neutral button--sm">
               <Printer className="h-4 w-4" /> Print
@@ -140,7 +140,7 @@ export default function OrderDetailPage() {
                   </div>
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Belum ada pembayaran.</p>
+                <p className="text-sm text-muted-foreground">No payment yet.</p>
               )}
             </div>
           </div>
@@ -149,7 +149,7 @@ export default function OrderDetailPage() {
           <div className="overflow-hidden rounded-2xl border border-stroke bg-white shadow-sm lg:col-span-2">
             <div className="flex items-center justify-between border-b border-stroke px-5 py-4">
               <h3 className="text-base font-bold text-gray-900">Items</h3>
-              <span className="text-sm text-muted-foreground">{order.items.length} produk</span>
+              <span className="text-sm text-muted-foreground">{order.items.length} products</span>
             </div>
             <div className="table-wrapper">
               <table className="table">
@@ -215,7 +215,7 @@ export default function OrderDetailPage() {
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">Belum ada tiket.</p>
+                <p className="text-sm text-muted-foreground">No tickets yet.</p>
               )}
             </div>
           </div>

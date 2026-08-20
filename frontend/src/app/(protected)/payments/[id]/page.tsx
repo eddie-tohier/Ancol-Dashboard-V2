@@ -58,7 +58,7 @@ export default function PaymentDetailPage() {
   if (error || !payment) {
     return (
       <div className="page content">
-        <div className="error-message">{error || "Payment tidak ditemukan"}</div>
+        <div className="error-message">{error || "Payment not found"}</div>
       </div>
     )
   }
@@ -69,7 +69,7 @@ export default function PaymentDetailPage() {
         <button onClick={() => router.back()} className="mb-2 inline-flex items-center gap-1 text-sm font-medium text-primary hover:underline">
           <ArrowLeft className="h-4 w-4" /> Back
         </button>
-        <PageHeader title={`Payment #${payment.payment_id}`} description="Detail pembayaran payment gateway.">
+        <PageHeader title={`Payment #${payment.payment_id}`} description="Payment gateway transaction detail.">
           <StatusBadge label={payment.status_label} color={payment.status_color} />
         </PageHeader>
 

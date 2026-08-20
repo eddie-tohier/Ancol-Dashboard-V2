@@ -104,7 +104,7 @@ export default function ReconciliationPage() {
   return (
     <div className="page content">
       <div className="content__container space-y-4">
-        <PageHeader title="Reconciliation" description="Sesi rekonsiliasi transaksi per jam per wahana.">
+        <PageHeader title="Reconciliation" description="Transaction reconciliation sessions by hour per attraction.">
           <button
             onClick={() => fetchSessions(date)}
             className="button button--neutral button--sm"
@@ -230,7 +230,7 @@ export default function ReconciliationPage() {
             )}
             {!detailLoading && !detail && (
               <p className="py-6 text-center text-sm text-muted-foreground">
-                Pilih sesi untuk melihat log rekonsiliasi.
+                Select a session to view reconciliation logs.
               </p>
             )}
             {!detailLoading && detail && (

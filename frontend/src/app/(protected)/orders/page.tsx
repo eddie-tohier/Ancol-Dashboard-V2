@@ -131,7 +131,7 @@ export default function OrdersPage() {
   return (
     <div className="page content">
       <div className="content__container space-y-4">
-        <PageHeader title="Orders" description="Daftar transaksi pembelian tiket." />
+        <PageHeader title="Orders" description="List of ticket purchase transactions." />
 
         {/* Summary */}
         <SummaryCards
@@ -140,7 +140,7 @@ export default function OrdersPage() {
             { label: "Total Orders", value: summary?.orders ?? 0, sub: `${summary?.status_counts?.PE ?? 0} pending · ${summary?.status_counts?.TI ?? 0} issued · ${summary?.status_counts?.FL ?? 0} failed`, bg: "/cube-bg.jpg" },
             { label: "Revenue", value: formatRupiah(summary?.revenue), sub: "Order PD + TI", bg: "/cube-bg_1.jpg" },
             { label: "Gross Amount", value: formatRupiah(summary?.gross_amt), sub: `PBJT ${formatRupiah(summary?.pbjt_amt)}`, bg: "/cube-bg_2.jpg" },
-            { label: "Tickets", value: (summary?.tickets ?? 0).toLocaleString("id-ID"), sub: "Total tiket terjual", bg: "/cube-bg_3.jpg" },
+            { label: "Tickets", value: (summary?.tickets ?? 0).toLocaleString("id-ID"), sub: "Total tickets sold", bg: "/cube-bg_3.jpg" },
           ]}
         />
 
@@ -223,7 +223,7 @@ export default function OrdersPage() {
                             {o.items.map((i) => i.product_name).join(", ")}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {o.total_qty} tiket {o.unit_ids.length ? `• ${o.unit_ids.join(" / ").toUpperCase()}` : ""}
+                            {o.total_qty} tickets {o.unit_ids.length ? `• ${o.unit_ids.join(" / ").toUpperCase()}` : ""}
                           </p>
                         </div>
                       </td>

@@ -124,26 +124,26 @@ export default function AdminUsersPage() {
       setModalOpen(false)
       fetchData()
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Gagal menyimpan user")
+      setError(err instanceof Error ? err.message : "Failed to save user")
     } finally {
       setSaving(false)
     }
   }
 
   async function handleDelete(user: User) {
-    if (!confirm(`Hapus user ${user.email}?`)) return
+    if (!confirm(`Delete user ${user.email}?`)) return
     try {
       await usersApi.delete(user.user_id)
       fetchData()
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Gagal menghapus user")
+      setError(err instanceof Error ? err.message : "Failed to delete user")
     }
   }
 
   return (
     <div className="page content">
       <div className="content__container space-y-4">
-        <PageHeader title="Admin Users" description="Kelola user, role, dan akses aplikasi.">
+        <PageHeader title="Admin Users" description="Manage users, roles, and application access.">
           <button onClick={openCreate} className="button button--primary button--sm">
             <Plus className="h-4 w-4" /> Add User
           </button>
@@ -271,7 +271,7 @@ export default function AdminUsersPage() {
                   id="uPassword"
                   type="password"
                   className="input"
-                  placeholder={form.user_id ? "Kosongkan jika tidak diubah" : "Min. 6 karakter"}
+                  placeholder={form.user_id ? "Leave blank if unchanged" : "Min. 6 characters"}
                   required={!form.user_id}
                   value={form.password}
                   onChange={(e) => setForm({ ...form, password: e.target.value })}

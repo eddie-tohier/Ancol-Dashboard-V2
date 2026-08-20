@@ -103,15 +103,15 @@ export default function TicketsPage() {
   return (
     <div className="page content">
       <div className="content__container space-y-4">
-        <PageHeader title="Tickets" description="Daftar e-ticket yang diterbitkan per order." />
+        <PageHeader title="Tickets" description="List of e-tickets issued per order." />
 
         {/* Summary */}
         <SummaryCards
           loading={summaryLoading}
           items={[
-            { label: "Total Tickets", value: (summary?.tickets ?? 0).toLocaleString("id-ID"), sub: "Total e-ticket", bg: "/cube-bg.jpg" },
-            { label: "Active", value: (summary?.status_counts?.ACTIVE ?? 0).toLocaleString("id-ID"), sub: "Tiket aktif", bg: "/cube-bg_1.jpg" },
-            { label: "Used", value: (summary?.status_counts?.USED ?? 0).toLocaleString("id-ID"), sub: "Tiket terpakai", bg: "/cube-bg_2.jpg" },
+            { label: "Total Tickets", value: (summary?.tickets ?? 0).toLocaleString("id-ID"), sub: "Total e-tickets", bg: "/cube-bg.jpg" },
+            { label: "Active", value: (summary?.status_counts?.ACTIVE ?? 0).toLocaleString("id-ID"), sub: "Active tickets", bg: "/cube-bg_1.jpg" },
+            { label: "Used", value: (summary?.status_counts?.USED ?? 0).toLocaleString("id-ID"), sub: "Used tickets", bg: "/cube-bg_2.jpg" },
             { label: "Expired / Refund", value: ((summary?.status_counts?.EXPIRED ?? 0) + (summary?.status_counts?.REFUND ?? 0)).toLocaleString("id-ID"), sub: `${summary?.status_counts?.EXPIRED ?? 0} expired · ${summary?.status_counts?.REFUND ?? 0} refund`, bg: "/cube-bg_3.jpg" },
           ]}
         />

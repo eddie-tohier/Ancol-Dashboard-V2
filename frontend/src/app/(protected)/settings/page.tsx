@@ -73,7 +73,7 @@ const MENU_LABELS: Record<string, string> = {
   "/tickets": "Tickets",
   "/reconciliation": "Reconciliation",
   "/customers": "Customers",
-  "/wahana": "Wahana",
+  "/attractions": "Attractions",
   "/settings": "Settings",
   "/admin/users": "Admin Users",
 }
@@ -343,9 +343,9 @@ export default function SettingsPage() {
         is_pbjt_include: form.is_pbjt_include,
       })
       setSettings(res as SettingsData)
-      showMessage("success", "Konfigurasi berhasil disimpan.")
+      showMessage("success", "Configuration saved successfully.")
     } catch (err: unknown) {
-      showMessage("error", err instanceof Error ? err.message : "Gagal menyimpan")
+      showMessage("error", err instanceof Error ? err.message : "Failed to save")
     } finally {
       setSaving(false)
     }
@@ -375,7 +375,7 @@ export default function SettingsPage() {
   return (
     <div className="page content">
       <div className="content__container">
-        <PageHeader title="Settings" description="Kelola profil, hak akses, dan menu aplikasi." />
+        <PageHeader title="Settings" description="Manage profile, access permissions, and application menu." />
 
         <div
           ref={tabContainerRef}
@@ -743,7 +743,7 @@ export default function SettingsPage() {
               </div>
               <h3 className="text-lg font-bold text-black">Revenue Sharing &amp; PBJT</h3>
               <p className="mb-6 text-sm text-muted-foreground mt-1 pr-0 sm:pr-14">
-                Konfigurasi bagi hasil ke Ancol dan pajak barang dan jasa tiket.
+                Configure revenue sharing with Ancol and ticket goods & services tax.
               </p>
 
               {saveMessage && (
@@ -783,7 +783,7 @@ export default function SettingsPage() {
                           onChange={(e) => setForm({ ...form, revsharing_pct: Number(e.target.value) })}
                         />
                       </div>
-                      <p className="text-xs text-muted-foreground">Persentase bagi hasil ke Ancol.</p>
+                      <p className="text-xs text-muted-foreground">Revenue sharing percentage for Ancol.</p>
                     </div>
 
                     <div className="space-y-2">
@@ -801,7 +801,7 @@ export default function SettingsPage() {
                           onChange={(e) => setForm({ ...form, pbjt_rate: Number(e.target.value) })}
                         />
                       </div>
-                      <p className="text-xs text-muted-foreground">Pajak barang dan jasa / tiket.</p>
+                      <p className="text-xs text-muted-foreground">Goods & services tax / ticket tax.</p>
                     </div>
                   </div>
 
@@ -814,12 +814,12 @@ export default function SettingsPage() {
                         checked={form.is_pbjt_include}
                         onChange={(e) => setForm({ ...form, is_pbjt_include: e.target.checked })}
                       />
-                      PBJT sudah termasuk harga tiket
+                      PBJT included in ticket price
                     </label>
 
                     <Button type="submit" disabled={saving} size="lg">
                       {saving ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Save className="h-4 w-4 mr-2" />}
-                      {saving ? "Menyimpan..." : "Simpan Konfigurasi"}
+                      {saving ? "Saving..." : "Save Configuration"}
                     </Button>
                   </div>
                 </form>
@@ -832,7 +832,7 @@ export default function SettingsPage() {
             <div key="payment" className="animate-tab-slide p-6">
               <h3 className="text-lg font-bold text-black">Payment Instruments</h3>
               <p className="mb-6 text-sm text-muted-foreground mt-1">
-                Enable atau disable metode pembayaran Virtual Account dari berbagai bank.
+                Enable or disable Virtual Account payment methods from various banks.
               </p>
 
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">

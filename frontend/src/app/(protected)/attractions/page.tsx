@@ -67,15 +67,15 @@ export default function WahanaPage() {
   return (
     <div className="page content thin-scrollbar">
       <div className="content__container space-y-4">
-        <PageHeader title="Wahana" description="Daftar unit wahana beserta produk dan tiket terbit." />
+        <PageHeader title="Attractions" description="List of attraction units with products and issued tickets." />
 
         <SummaryCards
           loading={summaryLoading}
           items={[
-            { label: "Total Wahana", value: (summary?.sites ?? 0).toLocaleString("id-ID"), bg: "/cube-bg.jpg" },
-            { label: "Total Produk", value: (summary?.products ?? 0).toLocaleString("id-ID"), bg: "/cube-bg_1.jpg" },
-            { label: "Produk Aktif", value: (summary?.active_products ?? 0).toLocaleString("id-ID"), sub: "Pernah terjual", bg: "/cube-bg_2.jpg" },
-            { label: "Total Tiket Terbit", value: (summary?.tickets_issued ?? 0).toLocaleString("id-ID"), bg: "/cube-bg_3.jpg" },
+            { label: "Total Attractions", value: (summary?.sites ?? 0).toLocaleString("id-ID"), bg: "/cube-bg.jpg" },
+            { label: "Total Products", value: (summary?.products ?? 0).toLocaleString("id-ID"), bg: "/cube-bg_1.jpg" },
+            { label: "Active Products", value: (summary?.active_products ?? 0).toLocaleString("id-ID"), sub: "Ever sold", bg: "/cube-bg_2.jpg" },
+            { label: "Total Tickets Issued", value: (summary?.tickets_issued ?? 0).toLocaleString("id-ID"), bg: "/cube-bg_3.jpg" },
           ]}
         />
 
@@ -96,7 +96,7 @@ export default function WahanaPage() {
                 <div className="min-w-0">
                   <h3 className="truncate font-bold text-gray-900">{site.name}</h3>
                   <p className="text-xs text-muted-foreground">
-                    {site.site_code.toUpperCase()} · {site.active_products} produk · {site.tickets_issued.toLocaleString()} tiket
+                    {site.site_code.toUpperCase()} · {site.active_products} products · {site.tickets_issued.toLocaleString()} tickets
                   </p>
                 </div>
               </div>
@@ -105,7 +105,7 @@ export default function WahanaPage() {
 
               <div className="flex flex-wrap gap-1.5">
                 {site.products.length === 0 && (
-                  <span className="text-xs text-muted-foreground">Tidak ada produk</span>
+                  <span className="text-xs text-muted-foreground">No products</span>
                 )}
                 {site.products.map((p) => (
                   <span

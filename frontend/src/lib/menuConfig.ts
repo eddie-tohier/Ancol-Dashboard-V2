@@ -10,7 +10,7 @@ export const defaultMenuWithSep = [
   "/reconciliation",
   "/customers",
   SEP,
-  "/wahana",
+  "/attractions",
   "/settings",
   "/admin/users",
 ]

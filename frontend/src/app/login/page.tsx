@@ -132,7 +132,7 @@ export default function LoginPage() {
 
           <div className="rounded-xl border border-dashed border-stroke bg-gray-50 p-3 text-xs text-muted-foreground">
             <p className="font-semibold text-foreground mb-1">Demo mode</p>
-            <p>Login dengan kombinasi email &amp; password apa saja (mis. <code className="font-mono">eddietohier@gmail.com / Ancol123!</code>).</p>
+            <p>Login with any email &amp; password combination (e.g. <code className="font-mono">eddietohier@gmail.com / Ancol123!</code>).</p>
           </div>
         </div>
       </section>

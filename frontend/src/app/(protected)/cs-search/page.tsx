@@ -85,7 +85,7 @@ function CopyField({
     <button
       type="button"
       onClick={handleCopy}
-      title="Klik untuk salin"
+      title="Click to copy"
       className="group -mx-1.5 inline-flex max-w-full items-center gap-1.5 rounded-md px-1.5 py-0.5 text-left transition-colors hover:bg-gray-100"
     >
       <span className={`truncate ${mono ? "font-mono" : ""} ${className}`}>{value}</span>
@@ -133,7 +133,7 @@ export default function CSSearchPage() {
       const res = await csApi.searchByOrderNo(trimmed)
       setOrder(res as OrderData)
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Pencarian gagal"
+      const msg = err instanceof Error ? err.message : "Search failed"
       setError(msg)
     } finally {
       setLoading(false)
@@ -161,7 +161,7 @@ export default function CSSearchPage() {
         }),
       })
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Gagal mengirim ulang tiket"
+      const msg = err instanceof Error ? err.message : "Failed to resend tickets"
       setResendError(msg)
     } finally {
       setResendLoading(false)
@@ -173,13 +173,13 @@ export default function CSSearchPage() {
   return (
     <div className="page content">
       <div className="content__container space-y-4">
-        <PageHeader title="CS Search" description="Cari order berdasarkan nomor order untuk layanan customer service." />
+        <PageHeader title="CS Search" description="Search orders by order number for customer service." />
 
         {/* Search Form */}
         <div>
           <form onSubmit={handleSearch}>
             <label htmlFor="orderNo" className="field__label mb-2 block">
-              Nomor Order
+              Order Number
             </label>
             <div className="relative">
               <input
@@ -188,7 +188,7 @@ export default function CSSearchPage() {
                 className="input h-12 pr-28 text-base"
                 value={orderNo}
                 onChange={(e) => setOrderNo(e.target.value)}
-                placeholder="Masukkan nomor order (ex: WBT01025826)..."
+                placeholder="Enter order number (e.g. WBT01025826)..."
                 disabled={!!(order || searched)}
                 autoFocus
               />
@@ -221,7 +221,7 @@ export default function CSSearchPage() {
         {error && (
           <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center">
             <XCircle className="mx-auto mb-2 h-10 w-10 text-red-400" />
-            <p className="font-semibold text-red-700">Order Tidak Ditemukan</p>
+            <p className="font-semibold text-red-700">Order Not Found</p>
             <p className="mt-1 text-sm text-red-500">{error}</p>
           </div>
         )}
@@ -230,7 +230,7 @@ export default function CSSearchPage() {
         {!loading && !error && !order && !searched && (
           <div className="flex flex-col items-center justify-center rounded-2xl border border-gray-200 bg-white py-20 text-center">
             <Search className="mb-4 h-14 w-14 text-gray-300" />
-            <p className="text-base text-gray-400">Masukkan nomor order dan klik Search untuk memulai pencarian.</p>
+            <p className="text-base text-gray-400">Enter an order number and click Search to start.</p>
           </div>
         )}
 
@@ -301,7 +301,7 @@ export default function CSSearchPage() {
               {/* Pembayaran */}
               <div className="overflow-hidden rounded-2xl border border-stroke bg-white shadow-sm">
                 <div className="flex items-center justify-between gap-3 border-b border-stroke bg-gray-50/70 px-6 py-3.5">
-                  <h3 className="text-sm font-bold uppercase tracking-wide text-gray-700">Pembayaran</h3>
+                  <h3 className="text-sm font-bold uppercase tracking-wide text-gray-700">Payment</h3>
                   {order.payment && <StatusBadge label={order.payment.status_label} color={order.payment.status_color} />}
                 </div>
 
@@ -343,7 +343,7 @@ export default function CSSearchPage() {
                       </div>
                     </>
                   ) : (
-                    <p className="text-sm text-muted-foreground">Tidak ada data pembayaran</p>
+                    <p className="text-sm text-muted-foreground">No payment data</p>
                   )}
                 </div>
               </div>
@@ -352,14 +352,14 @@ export default function CSSearchPage() {
             {/* Tickets Table + Resend Button */}
             <div className="overflow-hidden rounded-2xl border border-stroke bg-white shadow-sm">
               <div className="flex items-center justify-between border-b border-stroke bg-gray-50/70 px-6 py-3.5">
-                <h3 className="text-sm font-bold uppercase tracking-wide text-gray-700">Daftar Tiket</h3>
+                <h3 className="text-sm font-bold uppercase tracking-wide text-gray-700">Ticket List</h3>
                 <div className="flex items-center gap-3">
-                  <span className="text-sm text-muted-foreground">{order.tickets.length} tiket</span>
+                  <span className="text-sm text-muted-foreground">{order.tickets.length} tickets</span>
                   <button
                     onClick={handleResendAll}
                     disabled={resendLoading || !hasEligibleTickets}
                     className="button button--primary inline-flex items-center gap-2"
-                    title={!hasEligibleTickets ? "Tidak ada tiket yang bisa dikirim ulang" : "Kirim ulang semua tiket yang eligible"}
+                    title={!hasEligibleTickets ? "No tickets eligible for resending" : "Resend all eligible tickets"}
                   >
                     {resendLoading ? (
                       <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />

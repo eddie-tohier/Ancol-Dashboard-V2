@@ -129,8 +129,8 @@ export default function DashboardPage() {
   }
 
   const customerSeries = [
-    { name: "Customer Lama", data: (charts?.customer_growth ?? []).map((c) => c.returning_customers) },
-    { name: "Customer Baru", data: (charts?.customer_growth ?? []).map((c) => c.new_customers) },
+    { name: "Existing Customers", data: (charts?.customer_growth ?? []).map((c) => c.returning_customers) },
+    { name: "New Customers", data: (charts?.customer_growth ?? []).map((c) => c.new_customers) },
   ]
 
   const pendingCount = (stats?.status_counts.PE ?? 0) + (stats?.status_counts.TI ?? 0)
@@ -153,7 +153,7 @@ export default function DashboardPage() {
   return (
     <div className="page content">
       <div className="content__container space-y-5">
-        <PageHeader title="Dashboard" description="Ringkasan transaksi, pembayaran, dan tiket Ancol Connect.">
+        <PageHeader title="Dashboard" description="Summary of transactions, payments, and Ancol Connect tickets.">
           <div className="flex w-full flex-wrap items-end justify-end gap-2">
             <PeriodPicker
               dateFrom={dateFrom}
@@ -178,12 +178,12 @@ export default function DashboardPage() {
               </p>
               <h3 className="mt-3 text-3xl font-bold text-white sm:text-4xl">{formatRupiah(stats?.revenue)}</h3>
               <p className="mt-2 text-sm text-white/70">
-                Order berstatus PD + TI · <span className="font-semibold text-white">{stats?.orders.toLocaleString() ?? "0"} orders</span>
+                Orders with status PD + TI · <span className="font-semibold text-white">{stats?.orders.toLocaleString() ?? "0"} orders</span>
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <div className="rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
-                <p className="text-[11px] font-medium uppercase tracking-wider text-white/60">Dasar Penjualan</p>
+                <p className="text-[11px] font-medium uppercase tracking-wider text-white/60">Base Sales</p>
                 <p className="mt-1 text-lg font-bold text-white">{formatRupiah(sharing?.base_amt)}</p>
               </div>
               <div className="rounded-xl bg-white/10 px-4 py-3 backdrop-blur-sm">
@@ -251,7 +251,7 @@ export default function DashboardPage() {
           <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
             <h3 className="text-base font-bold text-gray-900">Customer Growth</h3>
             <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
-              Customer baru vs lama · {periodLabel}
+              New vs Existing Customers · {periodLabel}
             </span>
           </div>
           <BarChart
@@ -274,7 +274,7 @@ export default function DashboardPage() {
                   </span>
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-sm font-semibold text-gray-900">{p.product_name}</p>
-                    <p className="text-xs text-muted-foreground">{p.qty.toLocaleString()} tiket terjual</p>
+                    <p className="text-xs text-muted-foreground">{p.qty.toLocaleString()} tickets sold</p>
                   </div>
                   <span className="text-sm font-semibold text-gray-900">{formatRupiah(p.revenue)}</span>
                 </div>
@@ -286,7 +286,7 @@ export default function DashboardPage() {
           <div className="rounded-2xl border border-stroke bg-white p-5 shadow-sm">
             <h3 className="text-base font-bold text-gray-900">Revenue Sharing</h3>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Pembagian pendapatan · operator {sharing?.revsharing_pct ?? 0}% dari dasar penjualan
+              Revenue sharing · operator {sharing?.revsharing_pct ?? 0}% of base sales
             </p>
 
             <div className="mt-4 flex h-3 w-full overflow-hidden rounded-full bg-gray-100">
